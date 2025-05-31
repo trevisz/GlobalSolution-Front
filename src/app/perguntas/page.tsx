@@ -39,7 +39,7 @@ export default function PerguntasPage() {
 
   const buscarPerguntas = async (categoria: string) => {
     setCategoria(categoria);
-    const res = await fetch(`http://localhost:8080/perguntas/categoria/${encodeURIComponent(categoria)}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/perguntas/categoria/${encodeURIComponent(categoria)}`);
     const data = await res.json();
     setPerguntas(data);
     setRespostas({});
@@ -72,7 +72,7 @@ export default function PerguntasPage() {
     };
 
     try {
-      const res = await fetch("http://localhost:8080/resultados", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/resultados`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -87,7 +87,6 @@ export default function PerguntasPage() {
       console.error("Erro ao enviar pontuação:", error);
     }
 
-    // Marcar a categoria como finalizada e resetar quiz
     setCategoriasFinalizadas([...categoriasFinalizadas, categoria!]);
     setCategoria(null);
     setPerguntas([]);

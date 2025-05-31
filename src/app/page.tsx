@@ -22,7 +22,7 @@ const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
   }
 
   try {
-    const response = await fetch(`http://localhost:8080/usuarios/buscar?email=${email}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/usuarios/buscar?email=${email}`);
     if (response.ok) {
       const data = await response.json();
       if (data.nome.toLowerCase() !== nome.toLowerCase()) {

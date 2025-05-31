@@ -14,7 +14,7 @@ export default function ResultadoPage() {
 
   useEffect(() => {
     if (user) {
-      fetch(`http://localhost:8080/resultados/${user.id_usuario}/total`)
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/resultados/${user.id_usuario}/total`)
         .then(res => res.json())
         .then(data => {
           setTotalPontos(data.total_pontos);
