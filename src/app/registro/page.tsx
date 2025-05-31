@@ -30,7 +30,7 @@ export default function RegistroPage() {
       if (response.ok) {
         const data = await response.json();
         setUser(data);
-        alert(`Cadastro realizado com sucesso, ${data.nome}!`);
+        alert(`Cadastro ou login realizado com sucesso, ${data.nome}!`);
         router.push("/perguntas");
       } else {
         alert("Erro ao registrar");
