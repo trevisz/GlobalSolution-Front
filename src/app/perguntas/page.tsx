@@ -39,7 +39,7 @@ export default function PerguntasPage() {
 
   const buscarPerguntas = async (categoria: string) => {
     setCategoria(categoria);
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/perguntas/categoria/${encodeURIComponent(categoria)}`);
+    const res = await fetch(`https://quarkus-app.onrender.com/perguntas/categoria/${encodeURIComponent(categoria)}`);
     const data = await res.json();
     setPerguntas(data);
     setRespostas({});
@@ -72,7 +72,7 @@ export default function PerguntasPage() {
     };
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/resultados`, {
+      const res = await fetch("https://quarkus-app.onrender.com/resultados", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)

@@ -14,7 +14,7 @@ export default function ResultadoPage() {
 
   useEffect(() => {
     if (user) {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/resultados/${user.id_usuario}/total`)
+      fetch(`https://quarkus-app.onrender.com/resultados/${user.id_usuario}/total`)
         .then(res => res.json())
         .then(data => {
           setTotalPontos(data.total_pontos);
