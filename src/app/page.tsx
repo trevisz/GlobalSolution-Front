@@ -27,7 +27,7 @@ export default function Home() {
 
     setCarregando(true);
     try {
-      const response = await fetch(`http://localhost:8080/usuarios/buscar?email=${email}`);
+      const response = await fetch(`https://quarkus-app.onrender.com/usuarios/buscar?email=${email}`);
       if (response.ok) {
         const data = await response.json();
         if (data.nome.toLowerCase() !== nome.toLowerCase()) {
