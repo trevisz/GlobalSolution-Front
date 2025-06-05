@@ -62,6 +62,8 @@ Acesse: `http://localhost:3000`
 | Nome                  | RM      | LinkedIn                                                                 | GitHub                                   |
 |-----------------------|---------|--------------------------------------------------------------------------|------------------------------------------|
 | João Victor Trevisan  | 560263  | [![LinkedIn](https://img.shields.io/badge/-LinkedIn-blue?logo=linkedin)](https://www.linkedin.com/in/trevisaan7/) | [![GitHub](https://img.shields.io/badge/-GitHub-black?logo=github)](https://github.com/trevisz) |
+| Vinicius Rodrigues de Oliveira  | 559611  | [![LinkedIn](https://img.shields.io/badge/-LinkedIn-blue?logo=linkedin)](https://www.linkedin.com/in//) | [![GitHub](https://img.shields.io/badge/-GitHub-black?logo=github)](https://github.com/) |
+
 ---
 
 ## 📌 Vídeo de Demonstração
@@ -72,7 +74,7 @@ Acesse: `http://localhost:3000`
 
 ## 📌 Deploy
 
-🔗 [Acessar Projeto no Vercel](https://gsquiz.vercel.app) (em breve)
+🔗 [Acessar Projeto no Vercel](https://gsquiz.vercel.app) 
 
 ---
 
