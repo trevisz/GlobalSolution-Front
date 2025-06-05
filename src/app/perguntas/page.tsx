@@ -24,6 +24,9 @@ export default function PerguntasPage() {
   const [categoria, setCategoria] = useState<string | null>(null);
   const [perguntaAtual, setPerguntaAtual] = useState(0);
   const [carregando, setCarregando] = useState(false);
+  const [carregandoPerguntas, setCarregandoPerguntas] = useState(false);
+  const [erroAPI, setErroAPI] = useState<string | null>(null);
+  const [mensagem, setMensagem] = useState<string | null>(null);
   const [categoriasFinalizadas, setCategoriasFinalizadas] = useState<string[]>([]);
 
   const categorias = ["Meio Ambiente", "Sustentabilidade"];
@@ -37,14 +40,29 @@ export default function PerguntasPage() {
     }
   }, [user]);
 
-  const buscarPerguntas = async (categoria: string) => {
-    setCategoria(categoria);
+const buscarPerguntas = async (categoria: string) => {
+  setCategoria(categoria);
+  setCarregandoPerguntas(true);
+  setErroAPI(null);
+  try {
     const res = await fetch(`https://quarkus-app.onrender.com/perguntas/categoria/${encodeURIComponent(categoria)}`);
+    if (!res.ok) throw new Error("Erro ao buscar perguntas.");
     const data = await res.json();
     setPerguntas(data);
     setRespostas({});
     setPerguntaAtual(0);
-  };
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      setErroAPI(err.message);
+    } else {
+      setErroAPI("Erro inesperado ao buscar perguntas.");
+    }
+    setCategoria(null);
+  } finally {
+    setCarregandoPerguntas(false);
+  }
+};
+
 
   const handleResposta = (id: number, resposta: string) => {
     if (respostas[id]) return;
@@ -79,12 +97,13 @@ export default function PerguntasPage() {
       });
 
       if (res.ok) {
-        alert(`Quiz finalizado! Você acertou ${acertos} de ${perguntas.length} perguntas.`);
+        setMensagem(`✔️ Quiz finalizado! Você acertou ${acertos} de ${perguntas.length} perguntas.`);
       } else {
-        alert("Erro ao salvar pontuação.");
+        setMensagem("❌ Erro ao salvar pontuação.");
       }
     } catch (error) {
       console.error("Erro ao enviar pontuação:", error);
+      setMensagem("❌ Erro de conexão com o servidor.");
     }
 
     setCategoriasFinalizadas([...categoriasFinalizadas, categoria!]);
@@ -97,13 +116,17 @@ export default function PerguntasPage() {
   return (
     <>
       <Header />
-      <main className="p-4 flex flex-col min-h-screen bg-[#0a192f]">
+      <main className="p-4 flex flex-col min-h-screen bg-[#0a192f] text-white">
         {carregando ? (
           <p className="text-red-500 text-center mt-20 text-xl">
             Você precisa estar logado para acessar as perguntas. Redirecionando...
           </p>
         ) : (
           <>
+            {mensagem && (
+              <p className="text-center mb-4 font-semibold text-green-400">{mensagem}</p>
+            )}
+
             {!categoria && (
               <>
                 <h1 className="text-2xl font-bold mb-4 text-center">Escolha uma categoria</h1>
@@ -122,6 +145,8 @@ export default function PerguntasPage() {
                     );
                   })}
                 </div>
+                {erroAPI && <p className="text-red-500 text-center mt-4">{erroAPI}</p>}
+                {carregandoPerguntas && <p className="text-blue-300 text-center mt-4">Carregando perguntas...</p>}
               </>
             )}
 
@@ -137,8 +162,8 @@ export default function PerguntasPage() {
                   <h1 className="text-2xl font-bold text-center">{`Categoria: ${categoria}`}</h1>
                 </div>
 
-                <div key={perguntas[perguntaAtual].id_pergunta} className="border p-4 mb-4 rounded bg-gray-50">
-                  <p className="font-semibold text-lg text-black">{perguntas[perguntaAtual].enunciado}</p>
+                <div key={perguntas[perguntaAtual].id_pergunta} className="border p-4 mb-4 rounded bg-white text-black">
+                  <p className="font-semibold text-lg">{perguntas[perguntaAtual].enunciado}</p>
                   <div className="flex flex-col mt-2 gap-2">
                     {["A", "B", "C", "D"].map((letra) => {
                       const p = perguntas[perguntaAtual];

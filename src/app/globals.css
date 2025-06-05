@@ -34,3 +34,13 @@ main {
   display: flex;
   flex-direction: column;
 }
+
+* {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
