@@ -29,7 +29,7 @@ export default function PerguntasPage() {
   const [mensagem, setMensagem] = useState<string | null>(null);
   const [categoriasFinalizadas, setCategoriasFinalizadas] = useState<string[]>([]);
 
-  const categorias = ["Meio Ambiente", "Sustentabilidade"];
+  const categorias = ["Meio Ambiente", "Sustentabilidade", "Desastres Naturais"];
 
   useEffect(() => {
     if (!user) {

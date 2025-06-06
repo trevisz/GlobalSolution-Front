@@ -42,10 +42,10 @@ export default function ResultadoPage() {
   }, [user]);
 
   const calcularNivel = (pontos: number) => {
-    if (pontos >= 8) {
+    if (pontos >= 12) {
       setNivel("Diamante");
       setImagem("/images/Diamond.png");
-    } else if (pontos >= 5) {
+    } else if (pontos >= 7) {
       setNivel("Ouro");
       setImagem("/images/Gold.png");
     } else if (pontos >= 1) {
@@ -90,10 +90,12 @@ export default function ResultadoPage() {
                   <div className="w-40 h-2 bg-gray-700 rounded-full overflow-hidden mx-auto mt-4 mb-2">
                     <div
                       className="h-2 bg-[#66ccff]"
-                      style={{ width: `${(totalPontos ?? 0) * 10}%` }}
+                      style={{ width: `${(totalPontos ?? 0) * (100 / 15)}%` }}
                     ></div>
                   </div>
-                  <p className="text-white text-sm">{totalPontos ?? 0} ponto{(totalPontos ?? 0) !== 1 ? "s" : ""}</p>
+                  <p className="text-white text-sm">
+                    {totalPontos ?? 0} ponto{(totalPontos ?? 0) !== 1 ? "s" : ""} de 15
+                  </p>
                 </>
               )}
             </>
