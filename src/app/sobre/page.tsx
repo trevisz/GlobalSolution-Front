@@ -14,11 +14,11 @@ export default function SobrePage() {
       foto: "/images/joaovictor.png",
     },
     {
-      nome: "",
-      rm: "XXXXXX",
+      nome: "Vinicius R. de Oliveira",
+      rm: "559611",
       linkedin: "#",
       github: "#",
-      foto: "/images/placeholder.jpg",
+      foto: "/images/Vinicius.png",
     },
   ];
 
