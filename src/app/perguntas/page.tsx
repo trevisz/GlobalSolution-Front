@@ -1,200 +1,93 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useUser } from "@/context/UserContext";
+import Link from "next/link";
 
-type Pergunta = {
-  id_pergunta: number;
-  enunciado: string;
-  alternativaA: string;
-  alternativaB: string;
-  alternativaC: string;
-  alternativaD: string;
-  correta: string;
-};
-
-export default function PerguntasPage() {
-  const { user } = useUser();
-  const router = useRouter();
-  const [perguntas, setPerguntas] = useState<Pergunta[]>([]);
-  const [respostas, setRespostas] = useState<Record<number, string>>({});
-  const [categoria, setCategoria] = useState<string | null>(null);
-  const [perguntaAtual, setPerguntaAtual] = useState(0);
+export default function RegistroPage() {
+  const { setUser } = useUser();
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [mensagem, setMensagem] = useState<string | null>(null); // CORRIGIDO
   const [carregando, setCarregando] = useState(false);
-  const [carregandoPerguntas, setCarregandoPerguntas] = useState(false);
-  const [erroAPI, setErroAPI] = useState<string | null>(null);
-  const [mensagem, setMensagem] = useState<string | null>(null);
-  const [categoriasFinalizadas, setCategoriasFinalizadas] = useState<string[]>([]);
+  const router = useRouter();
 
-  const categorias = ["Meio Ambiente", "Sustentabilidade", "Desastres Naturais"];
+  const handleRegistro = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setMensagem(null);
 
-  useEffect(() => {
-    if (!user) {
-      setCarregando(true);
-      setTimeout(() => {
-        router.push("/");
-      }, 1500);
+    if (!nome.trim() || !email.trim()) {
+      setMensagem("⚠️ Preencha nome e email.");
+      return;
     }
-  }, [user]);
 
-const buscarPerguntas = async (categoria: string) => {
-  setCategoria(categoria);
-  setCarregandoPerguntas(true);
-  setErroAPI(null);
-  try {
-    const res = await fetch(`https://quarkus-app.onrender.com/perguntas/categoria/${encodeURIComponent(categoria)}`);
-    if (!res.ok) throw new Error("Erro ao buscar perguntas.");
-    const data = await res.json();
-    setPerguntas(data);
-    setRespostas({});
-    setPerguntaAtual(0);
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      setErroAPI(err.message);
-    } else {
-      setErroAPI("Erro inesperado ao buscar perguntas.");
-    }
-    setCategoria(null);
-  } finally {
-    setCarregandoPerguntas(false);
-  }
-};
-
-
-  const handleResposta = (id: number, resposta: string) => {
-    if (respostas[id]) return;
-    setRespostas({ ...respostas, [id]: resposta });
-
-    setTimeout(() => {
-      if (perguntaAtual < perguntas.length - 1) {
-        setPerguntaAtual(perguntaAtual + 1);
-      } else {
-        finalizarQuiz();
-      }
-    }, 1000);
-  };
-
-  const finalizarQuiz = async () => {
-    const acertos = Object.entries(respostas).filter(([id, resposta]) => {
-      const pergunta = perguntas.find((p) => p.id_pergunta === Number(id));
-      return pergunta?.correta === resposta;
-    }).length;
-
-    const payload = {
-      usuario_id: user?.id_usuario,
-      pontuacao: acertos,
-      dataJogo: new Date().toISOString()
-    };
-
+    setCarregando(true);
     try {
-      const res = await fetch("https://quarkus-app.onrender.com/resultados", {
+      const response = await fetch("https://quarkus-app.onrender.com/usuarios", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ nome, email }),
       });
 
-      if (res.ok) {
-        setMensagem(`✔️ Quiz finalizado! Você acertou ${acertos} de ${perguntas.length} perguntas.`);
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data);
+        setMensagem(`✅ Cadastro realizado com sucesso, ${data.nome}!`);
+        setTimeout(() => router.push("/perguntas"), 1000);
       } else {
-        setMensagem("❌ Erro ao salvar pontuação.");
+        setMensagem("❌ Erro ao registrar. Tente novamente.");
       }
-    } catch (error) {
-      console.error("Erro ao enviar pontuação:", error);
-      setMensagem("❌ Erro de conexão com o servidor.");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setMensagem(`Erro: ${err.message}`);
+      } else {
+        setMensagem("Erro inesperado ao registrar.");
+      }
+    } finally {
+      setCarregando(false);
     }
-
-    setCategoriasFinalizadas([...categoriasFinalizadas, categoria!]);
-    setCategoria(null);
-    setPerguntas([]);
-    setRespostas({});
-    setPerguntaAtual(0);
   };
 
   return (
     <>
       <Header />
-      <main className="p-4 flex flex-col min-h-screen bg-[#0a192f] text-white">
-        {carregando ? (
-          <p className="text-red-500 text-center mt-20 text-xl">
-            Você precisa estar logado para acessar as perguntas. Redirecionando...
-          </p>
-        ) : (
-          <>
-            {mensagem && (
-              <p className="text-center mb-4 font-semibold text-green-400">{mensagem}</p>
-            )}
+      <main className="flex flex-col items-center justify-center min-h-screen bg-[#0a192f] text-white p-4">
+        <h1 className="text-3xl font-bold mb-4 text-[#66ccff]">Cadastro no GSQuiz</h1>
 
-            {!categoria && (
-              <>
-                <h1 className="text-2xl font-bold mb-4 text-center">Escolha uma categoria</h1>
-                <div className="flex gap-4 justify-center flex-wrap">
-                  {categorias.map((cat) => {
-                    const finalizada = categoriasFinalizadas.includes(cat);
-                    return (
-                      <button
-                        key={cat}
-                        onClick={() => buscarPerguntas(cat)}
-                        disabled={finalizada}
-                        className={`p-2 rounded ${finalizada ? "bg-gray-300 text-gray-600 cursor-not-allowed" : "bg-blue-500 text-white"}`}
-                      >
-                        {cat} {finalizada ? "✔️" : ""}
-                      </button>
-                    );
-                  })}
-                </div>
-                {erroAPI && <p className="text-red-500 text-center mt-4">{erroAPI}</p>}
-                {carregandoPerguntas && <p className="text-blue-300 text-center mt-4">Carregando perguntas...</p>}
-              </>
-            )}
+        <form onSubmit={handleRegistro} className="flex flex-col gap-2 bg-[#0d253f] p-6 rounded-xl shadow-lg w-80">
+          <input
+            type="text"
+            placeholder="Nome"
+            className="p-2 rounded bg-[#0a192f] text-white"
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            className="p-2 rounded bg-[#0a192f] text-white"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button
+            type="submit"
+            disabled={carregando}
+            className={`p-2 rounded ${carregando ? "bg-gray-500 text-white" : "bg-[#66ccff] text-black"}`}
+          >
+            {carregando ? "Registrando..." : "Registrar"}
+          </button>
+        </form>
 
-            {categoria && perguntas.length > 0 && (
-              <>
-                <div className="flex flex-col items-center mb-4 relative">
-                  <button
-                    onClick={() => { setCategoria(null); setPerguntas([]); }}
-                    className="absolute left-0 bg-gray-300 text-black p-2 rounded"
-                  >
-                    Voltar às Categorias
-                  </button>
-                  <h1 className="text-2xl font-bold text-center">{`Categoria: ${categoria}`}</h1>
-                </div>
-
-                <div key={perguntas[perguntaAtual].id_pergunta} className="border p-4 mb-4 rounded bg-white text-black">
-                  <p className="font-semibold text-lg">{perguntas[perguntaAtual].enunciado}</p>
-                  <div className="flex flex-col mt-2 gap-2">
-                    {["A", "B", "C", "D"].map((letra) => {
-                      const p = perguntas[perguntaAtual];
-                      const alt = p[`alternativa${letra}` as keyof Pergunta];
-                      const correta = p.correta;
-                      const escolhida = respostas[p.id_pergunta];
-                      let cor = "bg-gray-100";
-
-                      if (escolhida) {
-                        if (letra === correta) cor = "bg-green-300";
-                        else if (letra === escolhida) cor = "bg-red-300";
-                        else cor = "opacity-50";
-                      }
-
-                      return (
-                        <button
-                          key={letra}
-                          onClick={() => handleResposta(p.id_pergunta, letra)}
-                          disabled={!!escolhida}
-                          className={`p-2 rounded ${cor} border text-black`}
-                        >
-                          {alt}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              </>
-            )}
-          </>
+        {mensagem && (
+          <p className="mt-4 text-sm text-yellow-300 text-center">{mensagem}</p>
         )}
+
+        <p className="mt-4">
+          Já tem conta? <Link href="/" className="text-[#66ccff] underline">Faça login</Link>
+        </p>
       </main>
       <Footer />
     </>

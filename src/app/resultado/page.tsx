@@ -94,7 +94,7 @@ export default function ResultadoPage() {
                     ></div>
                   </div>
                   <p className="text-white text-sm">
-                    {totalPontos ?? 0} ponto{(totalPontos ?? 0) !== 1 ? "s" : ""} de 15
+                    {totalPontos ?? 0} ponto{(totalPontos ?? 0) !== 1 ? "s" : ""}
                   </p>
                 </>
               )}
