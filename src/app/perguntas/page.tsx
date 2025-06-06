@@ -63,18 +63,21 @@ export default function PerguntasPage() {
     }
   };
 
-  const handleResposta = (id: number, resposta: string) => {
-    if (respostas[id]) return;
-    setRespostas({ ...respostas, [id]: resposta });
+const handleResposta = (id: number, resposta: string) => {
+  if (respostas[id]) return;
+  setRespostas((prev) => ({ ...prev, [id]: resposta }));
 
-    setTimeout(() => {
-      if (perguntaAtual < perguntas.length - 1) {
-        setPerguntaAtual(perguntaAtual + 1);
-      } else {
-        finalizarQuiz();
-      }
-    }, 1000);
-  };
+  const totalRespondidas = Object.keys(respostas).length + 1; // +1 porque a resposta ainda será setada
+
+  setTimeout(() => {
+    if (totalRespondidas < perguntas.length) {
+      setPerguntaAtual((prev) => prev + 1);
+    } else {
+      finalizarQuiz();
+    }
+  }, 1000);
+};
+
 
   const finalizarQuiz = async () => {
   console.log("📊 Respostas recebidas:", respostas);
