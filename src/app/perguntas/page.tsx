@@ -81,12 +81,6 @@ const handleResposta = (id: number, resposta: string) => {
 };
 
 const finalizarQuiz = async (respostasFinais: Record<number, string>) => {
-  console.log("📊 Respostas recebidas:", respostasFinais);
-  console.log("📋 Perguntas carregadas:", perguntas.map(p => ({
-    id: p.id_pergunta,
-    correta: p.correta
-  })));
-
   const acertos = Object.entries(respostasFinais).filter(([id, resposta]) => {
     const pergunta = perguntas.find((p) => p.id_pergunta === Number(id));
     if (!pergunta?.correta) return false;
