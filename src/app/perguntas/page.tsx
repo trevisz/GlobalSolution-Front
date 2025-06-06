@@ -65,61 +65,64 @@ export default function PerguntasPage() {
 
 const handleResposta = (id: number, resposta: string) => {
   if (respostas[id]) return;
-  setRespostas((prev) => ({ ...prev, [id]: resposta }));
 
-  const totalRespondidas = Object.keys(respostas).length + 1; // +1 porque a resposta ainda será setada
+  const novaRespostas = { ...respostas, [id]: resposta };
+  setRespostas(novaRespostas);
+
+  const aindaTemMais = perguntaAtual < perguntas.length - 1;
 
   setTimeout(() => {
-    if (totalRespondidas < perguntas.length) {
-      setPerguntaAtual((prev) => prev + 1);
+    if (aindaTemMais) {
+      setPerguntaAtual(perguntaAtual + 1);
     } else {
-      finalizarQuiz();
+      finalizarQuiz(novaRespostas);
     }
   }, 1000);
 };
 
-
-  const finalizarQuiz = async () => {
-  console.log("📊 Respostas recebidas:", respostas);
+const finalizarQuiz = async (respostasFinais: Record<number, string>) => {
+  console.log("📊 Respostas recebidas:", respostasFinais);
   console.log("📋 Perguntas carregadas:", perguntas.map(p => ({
     id: p.id_pergunta,
     correta: p.correta
   })));
-  const acertos = Object.entries(respostas).filter(([id, resposta]) => {
+
+  const acertos = Object.entries(respostasFinais).filter(([id, resposta]) => {
     const pergunta = perguntas.find((p) => p.id_pergunta === Number(id));
     if (!pergunta?.correta) return false;
     return pergunta.correta.trim().toUpperCase() === resposta.trim().toUpperCase();
   }).length;
 
-    const payload = {
-      usuario_id: user?.id_usuario,
-      pontuacao: acertos,
-      dataJogo: new Date().toISOString()
-    };
-
-    try {
-      const res = await fetch("https://quarkus-app.onrender.com/resultados", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-      if (res.ok) {
-        setMensagem(`✔️ Quiz finalizado! Você acertou ${acertos} de ${perguntas.length} perguntas.`);
-      } else {
-        setMensagem("❌ Erro ao salvar pontuação.");
-      }
-    } catch (error) {
-      console.error("Erro ao enviar pontuação:", error);
-      setMensagem("❌ Erro de conexão com o servidor.");
-    }
-
-    setCategoriasFinalizadas([...categoriasFinalizadas, categoria!]);
-    setCategoria(null);
-    setPerguntas([]);
-    setRespostas({});
-    setPerguntaAtual(0);
+  const payload = {
+    usuario_id: user?.id_usuario,
+    pontuacao: acertos,
+    dataJogo: new Date().toISOString()
   };
+
+  try {
+    const res = await fetch("https://quarkus-app.onrender.com/resultados", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      setMensagem(`✔️ Quiz finalizado! Você acertou ${acertos} de ${perguntas.length} perguntas.`);
+    } else {
+      setMensagem("❌ Erro ao salvar pontuação.");
+    }
+  } catch (error) {
+    console.error("Erro ao enviar pontuação:", error);
+    setMensagem("❌ Erro de conexão com o servidor.");
+  }
+
+  setCategoriasFinalizadas([...categoriasFinalizadas, categoria!]);
+  setCategoria(null);
+  setPerguntas([]);
+  setRespostas({});
+  setPerguntaAtual(0);
+};
+
 
   return (
     <>
