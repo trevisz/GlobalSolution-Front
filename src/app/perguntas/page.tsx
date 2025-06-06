@@ -77,10 +77,16 @@ export default function PerguntasPage() {
   };
 
   const finalizarQuiz = async () => {
-    const acertos = Object.entries(respostas).filter(([id, resposta]) => {
-      const pergunta = perguntas.find((p) => p.id_pergunta === Number(id));
-      return pergunta?.correta.trim().toUpperCase() === resposta.trim().toUpperCase();
-    }).length;
+  console.log("📊 Respostas recebidas:", respostas);
+  console.log("📋 Perguntas carregadas:", perguntas.map(p => ({
+    id: p.id_pergunta,
+    correta: p.correta
+  })));
+  const acertos = Object.entries(respostas).filter(([id, resposta]) => {
+    const pergunta = perguntas.find((p) => p.id_pergunta === Number(id));
+    if (!pergunta?.correta) return false;
+    return pergunta.correta.trim().toUpperCase() === resposta.trim().toUpperCase();
+  }).length;
 
     const payload = {
       usuario_id: user?.id_usuario,
