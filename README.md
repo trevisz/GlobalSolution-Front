@@ -69,7 +69,7 @@ Acesse: `http://localhost:3000`
 
 ## 📌 Vídeo de Demonstração
 
-📺 [Assista no YouTube](https://youtube.com/)
+📺 [Assista no YouTube](https://youtu.be/oxgBJ7gM_jo)
 
 ---
 
