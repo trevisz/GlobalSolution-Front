@@ -63,7 +63,7 @@ Acesse: `http://localhost:3000`
 |-----------------------|---------|--------------------------------------------------------------------------|------------------------------------------|
 | João Victor Trevisan  | 560263  | [![LinkedIn](https://img.shields.io/badge/-LinkedIn-blue?logo=linkedin)](https://www.linkedin.com/in/trevisaan7/) | [![GitHub](https://img.shields.io/badge/-GitHub-black?logo=github)](https://github.com/trevisz) |
 | Vinicius Rodrigues de Oliveira  | 559611  | [![LinkedIn](https://img.shields.io/badge/-LinkedIn-blue?logo=linkedin)](http://www.linkedin.com/in/vinicius-rodrigues-tecnologia) | [![GitHub](https://img.shields.io/badge/-GitHub-black?logo=github)]([https://github.com/](https://github.com/ViniciusO-I)) |
-| Vinicius Rodrigues de Oliveira  | 559611  | [![LinkedIn](https://img.shields.io/badge/-LinkedIn-blue?logo=linkedin)](https://www.linkedin.com/in/henrique-sladkevicius/) | [![GitHub](https://img.shields.io/badge/-GitHub-black?logo=github)](https://github.com/Henrique-error404) |
+| Henrique Marques Sladkevicius  | 560698  | [![LinkedIn](https://img.shields.io/badge/-LinkedIn-blue?logo=linkedin)](https://www.linkedin.com/in/henrique-sladkevicius/) | [![GitHub](https://img.shields.io/badge/-GitHub-black?logo=github)](https://github.com/Henrique-error404) |
 
 ---
 
