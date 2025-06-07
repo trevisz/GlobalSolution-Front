@@ -51,12 +51,6 @@ Acesse: `http://localhost:3000`
 
 ---
 
-## 📌 Imagens do Projeto
-
-
-
----
-
 ## 📌 Integrantes
 
 | Nome                  | RM      | LinkedIn                                                                 | GitHub                                   |
