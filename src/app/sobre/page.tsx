@@ -16,9 +16,16 @@ export default function SobrePage() {
     {
       nome: "Vinicius R. de Oliveira",
       rm: "559611",
-      linkedin: "#",
-      github: "#",
+      linkedin: "http://www.linkedin.com/in/vinicius-rodrigues-tecnologia",
+      github: "https://github.com/ViniciusO-I",
       foto: "/images/Vinicius.png",
+    },
+    {
+      nome: "Henrique M. Sladkevicius",
+      rm: "560698",
+      linkedin: "https://www.linkedin.com/in/henrique-sladkevicius/",
+      github: "https://github.com/Henrique-error404",
+      foto: "/images/Henrique.png",
     },
   ];
 
